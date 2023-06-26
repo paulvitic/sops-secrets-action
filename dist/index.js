@@ -227,10 +227,6 @@ function isSopsInstalled() {
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            // await wait(parseInt(ms, 10))
-            // core.debug(new Date().toTimeString())
-            //
-            // core.setOutput('time', new Date().toTimeString())
             if (!isSopsInstalled()) {
                 yield (0, installSops_1.installSops)();
             }
@@ -284,33 +280,22 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.setSecrets = void 0;
 const child_process_1 = __nccwpck_require__(2081);
 const core = __importStar(__nccwpck_require__(2186));
-function setGitHubSecrets(data) {
-    for (const key in data) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-            console.log(`Setting secret for key '${key}'`);
-            const value = data[key];
-            core.exportVariable(key, value);
-            core.setSecret(value);
-        }
-    }
-}
 function setSecrets(sopsPath) {
     try {
-        // Decrypt the sops file using the sops command
-        // const kmsPath = process.env.KMS_PATH;
-        // if (!kmsPath) {
-        //     throw new Error('KMS_PATH environment variable not set');
-        // }
-        // const decryptedJson = execSync(`sops --decrypt --gcp-kms ${kmsPath} common_state.enc.json`, {
-        //     encoding: 'utf8',
-        // });
         const decryptedJson = (0, child_process_1.execSync)(`sops --decrypt ${sopsPath}`, {
             encoding: 'utf8'
         });
         // Parse the decrypted JSON
         const decryptedData = JSON.parse(decryptedJson);
         // Set the decrypted values as GitHub Actions secrets
-        setGitHubSecrets(decryptedData);
+        for (const key in decryptedData) {
+            if (Object.prototype.hasOwnProperty.call(decryptedData, key)) {
+                console.log(`Setting secret for key '${key}'`);
+                const value = decryptedData[key];
+                core.exportVariable(key, value);
+                core.setSecret(value);
+            }
+        }
     }
     catch (error) {
         if (error instanceof Error) {
