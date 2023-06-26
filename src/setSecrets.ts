@@ -1,41 +1,39 @@
-import { execSync } from 'child_process';
-import * as core from '@actions/core';
+import {execSync} from 'child_process'
+import * as core from '@actions/core'
 
-function setGitHubSecrets(data: { [key: string]: any }) {
-    for (const key in data) {
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const value = data[key];
-            core.setSecret(value);
-            console.log(`Setting secret for key '${key}'`);
-        }
+function setGitHubSecrets(data: {[key: string]: string}): void {
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      const value = data[key]
+      core.setSecret(value)
+      console.log(`Setting secret for key '${key}'`)
     }
+  }
 }
 
 export function setSecrets(sopsPath: string): void {
-    try {
-        // Decrypt the sops file using the sops command
-        // const kmsPath = process.env.KMS_PATH;
-        // if (!kmsPath) {
-        //     throw new Error('KMS_PATH environment variable not set');
-        // }
-        // const decryptedJson = execSync(`sops --decrypt --gcp-kms ${kmsPath} common_state.enc.json`, {
-        //     encoding: 'utf8',
-        // });
+  try {
+    // Decrypt the sops file using the sops command
+    // const kmsPath = process.env.KMS_PATH;
+    // if (!kmsPath) {
+    //     throw new Error('KMS_PATH environment variable not set');
+    // }
+    // const decryptedJson = execSync(`sops --decrypt --gcp-kms ${kmsPath} common_state.enc.json`, {
+    //     encoding: 'utf8',
+    // });
 
-        const decryptedJson = execSync(`sops --decrypt ${sopsPath}`, {
-            encoding: 'utf8',
-        });
+    const decryptedJson = execSync(`sops --decrypt ${sopsPath}`, {
+      encoding: 'utf8'
+    })
 
-        // Parse the decrypted JSON
-        const decryptedData = JSON.parse(decryptedJson);
+    // Parse the decrypted JSON
+    const decryptedData = JSON.parse(decryptedJson)
 
-        // Set the decrypted values as GitHub Actions secrets
-        setGitHubSecrets(decryptedData);
-    } catch (error) {
-        if (error instanceof Error){
-            core.setFailed(error.message);
-        }
+    // Set the decrypted values as GitHub Actions secrets
+    setGitHubSecrets(decryptedData)
+  } catch (error) {
+    if (error instanceof Error) {
+      core.setFailed(error.message)
     }
+  }
 }
-
-
