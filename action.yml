@@ -6,6 +6,13 @@ inputs:
     required: true
     description: 'input description here'
     default: '.github/actions/sops/secrets.enc.json'
+  version:
+    description: 'Version of sops'
+    required: true
+    default: 'latest'
+outputs:
+  sops-path:
+    description: 'Path to the cached sops binary'
 runs:
   using: 'node16'
   main: 'dist/index.js'
