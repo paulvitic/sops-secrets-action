@@ -6,6 +6,7 @@ on: # rebuild any PRs and main branch changes
       - main
       - 'releases/*'
 
+# Required for GCP auth
 permissions:
   contents: read
   id-token: write
