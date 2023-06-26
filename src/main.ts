@@ -13,11 +13,6 @@ function isSopsInstalled(): boolean {
 }
 async function run(): Promise<void> {
   try {
-    // await wait(parseInt(ms, 10))
-    // core.debug(new Date().toTimeString())
-    //
-    // core.setOutput('time', new Date().toTimeString())
-
     if (!isSopsInstalled()) {
       await installSops()
     } else {

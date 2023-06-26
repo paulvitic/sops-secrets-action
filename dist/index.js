@@ -287,9 +287,10 @@ const core = __importStar(__nccwpck_require__(2186));
 function setGitHubSecrets(data) {
     for (const key in data) {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const value = data[key];
-            core.setSecret(value);
             console.log(`Setting secret for key '${key}'`);
+            const value = data[key];
+            core.exportVariable(key, value);
+            core.setSecret(value);
         }
     }
 }
