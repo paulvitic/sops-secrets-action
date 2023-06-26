@@ -1,0 +1,11 @@
+name: 'Your name here'
+description: 'Provide a description here'
+author: 'Your name or organization here'
+inputs:
+  sopsPath: # change this
+    required: true
+    description: 'input description here'
+    default: '.github/actions/sops/secrets.enc.json'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
