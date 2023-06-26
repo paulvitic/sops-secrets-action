@@ -19,4 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - id: gcp-auth
+        name: Authenticate with GCP
+        uses: 'google-github-actions/auth@v1'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: projects/381573879100/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
+          service_account: github@foundation-349518.iam.gserviceaccount.com
       - uses: ./

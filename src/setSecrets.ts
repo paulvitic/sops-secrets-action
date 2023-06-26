@@ -1,12 +1,14 @@
 import {execSync} from 'child_process'
 import * as core from '@actions/core'
+import {exportVariable} from "@actions/core";
 
 function setGitHubSecrets(data: {[key: string]: string}): void {
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
-      const value = data[key]
-      core.setSecret(value)
       console.log(`Setting secret for key '${key}'`)
+      const value = data[key]
+      core.exportVariable(key, value)
+      core.setSecret(value)
     }
   }
 }
