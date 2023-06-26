@@ -32,3 +32,5 @@ jobs:
           workload_identity_provider: projects/381573879100/locations/global/workloadIdentityPools/github-oidc-pool/providers/github-oidc-provider
           service_account: github@foundation-349518.iam.gserviceaccount.com
       - uses: ./
+      - run: |
+          echo key is "$secretKey"
